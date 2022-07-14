@@ -7,11 +7,22 @@ const saltedSha256 = require("salted-sha256");
 
 function Login() {
   const [formData, setFormData] = useState({
-    username: "",
     password: "",
   });
+
+  const [selectedUser, setSelectedUser] = useState({
+    id: null,
+    username: "",
+    password: "",
+    requirePassword: false,
+  });
   const [userList, setUserList] = useGetUsers();
-  const { user, setUser } = useContext(UserContext);
+  const [user, setUser] = useContext(UserContext);
+
+  function handleUserSelect(event) {
+    const value = event.target.value;
+    setSelectedUser(userList.find((user) => user.id == value));
+  }
 
   function handleChange(event) {
     const name = event.target.name;
@@ -21,52 +32,51 @@ function Login() {
 
   function handleSubmit(event) {
     event.preventDefault();
-    const url = "https://dry-lowlands-31397.herokuapp.com/users";
     const saltedHash = saltedSha256(formData.password, "SALTY-CHIPS");
-    const testUser = userList.find(
-      (user) => user.username === formData.username
-    );
-    testUser
-      ? fetch(url + `/${testUser.id}`)
-          .then((res) => res.json())
-          .then((data) => {
-            if (data.password === saltedHash) {
-              return {
-                username: data.username,
-                id: data.id,
-                isLoggedIn: true,
-              };
-            } else {
-              console.error("Password does not match!");
-            }
+    const url = `https://dry-lowlands-31397.herokuapp.com/users/${selectedUser.id}`;
+    if (selectedUser.requirePassword && selectedUser.password !== saltedHash) {
+      console.error("Invalid password");
+    } else {
+      fetch(url)
+        .then((res) => res.json())
+        .then((data) => console.log(data))
+        .then(() =>
+          setUser({
+            username: selectedUser.username,
+            id: selectedUser.id,
+            isLoggedIn: true,
           })
-          .then((res) => (res ? setUser(res) : null))
-      : console.error("User not found!");
+        );
+    }
   }
 
   return (
     <Form onSubmit={handleSubmit}>
       <Form.Field>
-        <label>Username:</label>
-        <input
-          name="username"
-          placeholder="Username"
-          value={formData.username}
-          onChange={handleChange}
-        />
+        <label>Load Portfolio by Username:</label>
+        <select onChange={handleUserSelect}>
+          <option selected disabled></option>
+          {userList.map((user, index) => (
+            <option name="id" key={index} value={user.id}>
+              {user.username}
+            </option>
+          ))}
+        </select>
       </Form.Field>
-      <Form.Field>
-        <label>Password:</label>
-        <input
-          name="password"
-          type="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-        />
-      </Form.Field>
+      {selectedUser.requirePassword ? (
+        <Form.Field>
+          <label>Password:</label>
+          <input
+            name="password"
+            type="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+          />
+        </Form.Field>
+      ) : null}
       <Button type="submit" color="blue">
-        Log In
+        Load Portfolio
       </Button>
     </Form>
   );

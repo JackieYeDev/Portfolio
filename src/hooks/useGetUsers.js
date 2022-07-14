@@ -12,6 +12,8 @@ function useGetUsers() {
             return {
               id: user.id,
               username: user.username,
+              password: user.password,
+              requirePassword: user.requirePassword,
             };
           })
         )

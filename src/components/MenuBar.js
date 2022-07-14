@@ -12,7 +12,7 @@ function MenuBar(props) {
     setActiveTab(path);
   }, [window.location.pathname]);
 
-  const user = useContext(UserContext);
+  const [user] = useContext(UserContext);
 
   return (
     <div>

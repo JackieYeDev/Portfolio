@@ -5,7 +5,7 @@ import { Divider, Grid, Rail, Segment } from "semantic-ui-react";
 import { UserContext } from "../context/user";
 
 function Home() {
-  const user = useContext(UserContext);
+  const [user] = useContext(UserContext);
   return (
     <Grid centered columns={3}>
       <Grid.Column>
@@ -31,7 +31,11 @@ function Home() {
             <i>Flatiron School - SE Flex - Phase 2 - Portfolio App</i>
           </h3>
           <Divider horizontal>o</Divider>
-          <p>Create a new portfolio or select an existing portfolio!</p>
+          <p>
+            {user.isLoggedIn
+              ? `Welcome back: ${user.username}`
+              : `Create a new portfolio or select an existing portfolio!`}
+          </p>
         </Segment>
       </Grid.Column>
     </Grid>
