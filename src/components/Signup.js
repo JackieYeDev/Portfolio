@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { Button, Form } from "semantic-ui-react";
+import { Button, Form, Message } from "semantic-ui-react";
 
 function Signup() {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
+    passwordConfirmation: "",
+    warnings: "",
   });
   function handleChange(event) {
     const name = event.target.name;
@@ -14,10 +16,15 @@ function Signup() {
 
   function handleSubmit(event) {
     event.preventDefault();
+    if (formData.password !== formData.passwordConfirmation) {
+      setFormData({ ...formData, warnings: "Passwords does not match!" });
+    } else {
+      setFormData({ ...formData, warnings: "" });
+    }
   }
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit} warning={formData.warnings ? true : false}>
       <Form.Field>
         <label>Username:</label>
         <input
@@ -37,6 +44,22 @@ function Signup() {
           onChange={handleChange}
         />
       </Form.Field>
+
+      <Form.Field>
+        <label>Confirm Password:</label>
+        <input
+          name="passwordConfirmation"
+          type="password"
+          placeholder="Re-Enter Password"
+          value={formData.passwordConfirmation}
+          onChange={handleChange}
+        />
+      </Form.Field>
+      <Message
+        warning
+        header="Something went wrong!"
+        list={[formData.warnings]}
+      />
       <Button type="submit" color="green">
         Sign Up
       </Button>
