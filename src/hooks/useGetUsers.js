@@ -6,7 +6,16 @@ function useGetUsers() {
   useEffect(() => {
     fetch(url)
       .then((res) => res.json())
-      .then((data) => setUserList(data.map((user) => user.username)));
+      .then((data) =>
+        setUserList(
+          data.map((user) => {
+            return {
+              id: user.id,
+              username: user.username,
+            };
+          })
+        )
+      );
   }, []);
 
   return [userList, setUserList];

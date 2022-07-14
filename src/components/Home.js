@@ -31,7 +31,7 @@ function Home() {
             <i>Flatiron School - SE Flex - Phase 2 - Portfolio App</i>
           </h3>
           <Divider horizontal>o</Divider>
-          <p>Please signup or login to continue</p>
+          <p>Create a new portfolio or select an existing portfolio!</p>
         </Segment>
       </Grid.Column>
     </Grid>

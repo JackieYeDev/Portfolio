@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Form, Message } from "semantic-ui-react";
+import { Button, Checkbox, Form, Message } from "semantic-ui-react";
 import useGetUsers from "../hooks/useGetUsers";
 const saltedSha256 = require("salted-sha256");
 
@@ -8,6 +8,7 @@ function Signup() {
     username: "",
     password: "",
     passwordConfirmation: "",
+    requirePassword: false,
     warning: "",
     success: "",
   });
@@ -20,16 +21,30 @@ function Signup() {
     setFormData({ ...formData, [name]: value });
   }
 
+  function handleClick() {
+    setFormData({ ...formData, requirePassword: !formData.requirePassword });
+  }
+
   function handleSubmit(event) {
     event.preventDefault();
-    if (userList.find((user) => user === formData.username)) {
+    if (formData.username.length === 0) {
+      setFormData({
+        ...formData,
+        warning: "Please enter 1 or more character(s) for the username",
+      });
+    } else if (userList.find((user) => user.username === formData.username)) {
       setFormData({ ...formData, warning: "User exists!" });
-    } else if (formData.password !== formData.passwordConfirmation) {
+    } else if (
+      formData.requirePassword &&
+      formData.password !== formData.passwordConfirmation
+    ) {
       setFormData({ ...formData, warning: "Passwords does not match!" });
     } else {
       setFormData({ ...formData, warning: "" });
       const url = "https://dry-lowlands-31397.herokuapp.com/users";
-      const saltedHash = saltedSha256(formData.password, "SALTY-CHIPS");
+      const saltedHash = formData.requirePassword
+        ? saltedSha256(formData.password, "SALTY-CHIPS")
+        : "";
       fetch(url, {
         method: "POST",
         headers: {
@@ -38,6 +53,7 @@ function Signup() {
         body: JSON.stringify({
           username: formData.username,
           password: saltedHash,
+          requirePassword: formData.requirePassword,
         }),
       })
         .then((res) => {
@@ -46,14 +62,14 @@ function Signup() {
               username: "",
               password: "",
               passwordConfirmation: "",
+              requirePassword: false,
               warning: "",
-              success: "Your account has been successfully created.",
+              success: "Your portfolio has been successfully created.",
             });
             return res.json();
           }
         })
-        .then((data) => setUserList([...userList, data.username]))
-        .then(() => console.log(userList));
+        .then((data) => setUserList([...userList, data.username]));
     }
   }
 
@@ -64,7 +80,7 @@ function Signup() {
       success={formData.success ? true : false}
     >
       <Form.Field>
-        <label>Username:</label>
+        <label>Portfolio by Username:</label>
         <input
           name="username"
           placeholder="Username"
@@ -73,34 +89,46 @@ function Signup() {
         />
       </Form.Field>
       <Form.Field>
-        <label>Password:</label>
-        <input
-          name="password"
-          type="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
+        <Checkbox
+          label="Use password (optional)"
+          name="requirePassword"
+          onClick={handleClick}
+          checked={formData.requirePassword}
         />
       </Form.Field>
+      {formData.requirePassword ? (
+        <>
+          <Form.Field>
+            <label>Password: </label>
+            <input
+              name="password"
+              type="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+            />
+          </Form.Field>
 
-      <Form.Field>
-        <label>Confirm Password:</label>
-        <input
-          name="passwordConfirmation"
-          type="password"
-          placeholder="Re-Enter Password"
-          value={formData.passwordConfirmation}
-          onChange={handleChange}
-        />
-      </Form.Field>
+          <Form.Field>
+            <label>Confirm Password:</label>
+            <input
+              name="passwordConfirmation"
+              type="password"
+              placeholder="Re-Enter Password"
+              value={formData.passwordConfirmation}
+              onChange={handleChange}
+            />
+          </Form.Field>
+        </>
+      ) : null}
       <Message
         warning
         header="Something went wrong!"
         list={[formData.warning]}
       />
-      <Message success header="Sign up complete" list={[formData.success]} />
+      <Message success header="Creation complete" list={[formData.success]} />
       <Button type="submit" color="green">
-        Sign Up
+        Create
       </Button>
     </Form>
   );
