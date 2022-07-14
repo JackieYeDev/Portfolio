@@ -8,17 +8,17 @@ import Stock from "./Stock";
 function App() {
   const routerLinks = [
     {
-      name: "Home",
+      name: "home",
       path: "/",
       component: Home,
     },
     {
-      name: "Portfolio",
+      name: "portfolio",
       path: "/portfolio",
       component: Portfolio,
     },
     {
-      name: "Stock",
+      name: "stock",
       path: "/stock",
       component: Stock,
     },
