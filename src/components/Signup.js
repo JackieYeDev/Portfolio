@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Button, Form, Message } from "semantic-ui-react";
+import useGetUsers from "../hooks/useGetUsers";
 const saltedSha256 = require("salted-sha256");
 
 function Signup() {
@@ -10,6 +11,9 @@ function Signup() {
     warning: "",
     success: "",
   });
+
+  const [userList, setUserList] = useGetUsers();
+
   function handleChange(event) {
     const name = event.target.name;
     const value = event.target.value;
@@ -18,7 +22,9 @@ function Signup() {
 
   function handleSubmit(event) {
     event.preventDefault();
-    if (formData.password !== formData.passwordConfirmation) {
+    if (userList.find((user) => user === formData.username)) {
+      setFormData({ ...formData, warning: "User exists!" });
+    } else if (formData.password !== formData.passwordConfirmation) {
       setFormData({ ...formData, warning: "Passwords does not match!" });
     } else {
       setFormData({ ...formData, warning: "" });
@@ -33,17 +39,21 @@ function Signup() {
           username: formData.username,
           password: saltedHash,
         }),
-      }).then((res) => {
-        if (res.statusText === "Created") {
-          setFormData({
-            username: "",
-            password: "",
-            passwordConfirmation: "",
-            warning: "",
-            success: "Your account has been successfully created.",
-          });
-        }
-      });
+      })
+        .then((res) => {
+          if (res.statusText === "Created") {
+            setFormData({
+              username: "",
+              password: "",
+              passwordConfirmation: "",
+              warning: "",
+              success: "Your account has been successfully created.",
+            });
+            return res.json();
+          }
+        })
+        .then((data) => setUserList([...userList, data.username]))
+        .then(() => console.log(userList));
     }
   }
 
