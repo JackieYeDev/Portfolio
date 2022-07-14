@@ -2,22 +2,8 @@ import React, { useState } from "react";
 import "semantic-ui-css/semantic.min.css";
 import { Input, Menu } from "semantic-ui-react";
 
-function MenuBar() {
+function MenuBar(props) {
   const [activeTab, setActiveTab] = useState("");
-  const routerLinks = [
-    {
-      name: "Home",
-      path: "/",
-    },
-    {
-      name: "Portfolio",
-      path: "/portfolio",
-    },
-    {
-      name: "Stock",
-      path: "/stock",
-    },
-  ];
 
   // @TODO: Replace with window.location.pathname
   function handleClick(event) {
@@ -28,7 +14,7 @@ function MenuBar() {
   return (
     <div>
       <Menu>
-        {routerLinks.map((link, index) => (
+        {props.links.map((link, index) => (
           <Menu.Item
             key={index}
             id={link.name}
