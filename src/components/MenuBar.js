@@ -1,15 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { NavLink } from "react-router-dom";
 import "semantic-ui-css/semantic.min.css";
 import { Input, Menu } from "semantic-ui-react";
 
 function MenuBar(props) {
   const [activeTab, setActiveTab] = useState("");
 
-  // @TODO: Replace with window.location.pathname
-  function handleClick(event) {
-    const id = event.target.id;
-    setActiveTab(id);
-  }
+  useEffect(() => {
+    const path = window.location.pathname.split("/")[1];
+    setActiveTab(path);
+  }, [window.location.pathname]);
 
   return (
     <div>
@@ -18,8 +18,10 @@ function MenuBar(props) {
           <Menu.Item
             key={index}
             id={link.name}
-            onClick={handleClick}
             active={activeTab === link.name}
+            as={NavLink}
+            exact
+            to={link.path}
           >
             {link.name.toUpperCase()}
           </Menu.Item>
