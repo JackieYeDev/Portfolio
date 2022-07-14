@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { Button, Form, Message } from "semantic-ui-react";
+const saltedSha256 = require("salted-sha256");
 
 function Signup() {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
     passwordConfirmation: "",
-    warnings: "",
+    warning: "",
+    success: "",
   });
   function handleChange(event) {
     const name = event.target.name;
@@ -17,14 +19,40 @@ function Signup() {
   function handleSubmit(event) {
     event.preventDefault();
     if (formData.password !== formData.passwordConfirmation) {
-      setFormData({ ...formData, warnings: "Passwords does not match!" });
+      setFormData({ ...formData, warning: "Passwords does not match!" });
     } else {
-      setFormData({ ...formData, warnings: "" });
+      setFormData({ ...formData, warning: "" });
+      const url = "https://dry-lowlands-31397.herokuapp.com/users";
+      const saltedHash = saltedSha256(formData.password, "SALTY-CHIPS");
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: formData.username,
+          password: saltedHash,
+        }),
+      }).then((res) => {
+        if (res.statusText === "Created") {
+          setFormData({
+            username: "",
+            password: "",
+            passwordConfirmation: "",
+            warning: "",
+            success: "Your account has been successfully created.",
+          });
+        }
+      });
     }
   }
 
   return (
-    <Form onSubmit={handleSubmit} warning={formData.warnings ? true : false}>
+    <Form
+      onSubmit={handleSubmit}
+      warning={formData.warning ? true : false}
+      success={formData.success ? true : false}
+    >
       <Form.Field>
         <label>Username:</label>
         <input
@@ -58,8 +86,9 @@ function Signup() {
       <Message
         warning
         header="Something went wrong!"
-        list={[formData.warnings]}
+        list={[formData.warning]}
       />
+      <Message success header="Sign up complete" list={[formData.success]} />
       <Button type="submit" color="green">
         Sign Up
       </Button>
