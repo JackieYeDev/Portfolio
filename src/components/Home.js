@@ -1,15 +1,15 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import Signup from "./Signup";
 import Login from "./Login";
 import { Divider, Grid, Rail, Segment } from "semantic-ui-react";
 import { UserContext } from "../context/user";
+import Chart from "./Chart";
 
 function Home() {
   const [user] = useContext(UserContext);
   return (
     <Grid centered columns={3}>
       <Grid.Column>
-        <Divider horizontal></Divider>
         <Segment>
           {user.isLoggedIn ? null : (
             <>

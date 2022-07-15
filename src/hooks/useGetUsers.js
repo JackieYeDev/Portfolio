@@ -14,11 +14,12 @@ function useGetUsers() {
               username: user.username,
               password: user.password,
               requirePassword: user.requirePassword,
+              stocks: user.stocks,
             };
           })
         )
       );
-  }, []);
+  }, [userList]);
 
   return [userList, setUserList];
 }

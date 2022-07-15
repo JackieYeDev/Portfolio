@@ -54,6 +54,7 @@ function Signup() {
           username: formData.username,
           password: saltedHash,
           requirePassword: formData.requirePassword,
+          stocks: [],
         }),
       })
         .then((res) => {

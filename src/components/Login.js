@@ -1,7 +1,6 @@
 import React, { useState, useContext } from "react";
 import { Button, Form } from "semantic-ui-react";
 import useGetUsers from "../hooks/useGetUsers";
-import * as url from "url";
 import { UserContext } from "../context/user";
 const saltedSha256 = require("salted-sha256");
 
@@ -55,7 +54,7 @@ function Login() {
       <Form.Field>
         <label>Load Portfolio by Username:</label>
         <select onChange={handleUserSelect}>
-          <option selected disabled></option>
+          <option selected value={0} disabled></option>
           {userList.map((user, index) => (
             <option name="id" key={index} value={user.id}>
               {user.username}
