@@ -7,10 +7,10 @@ import { UserContext } from "../context/user";
 function MenuBar(props) {
   const [activeTab, setActiveTab] = useState("");
 
-  useEffect(() => {
-    const path = window.location.pathname.split("/")[1];
-    setActiveTab(path);
-  }, [window.location.pathname]);
+  function handleClick(event) {
+    const id = event.target.id;
+    setActiveTab(id);
+  }
 
   const [user] = useContext(UserContext);
 
@@ -28,6 +28,7 @@ function MenuBar(props) {
                 as={NavLink}
                 exact
                 to={link.path}
+                onClick={handleClick}
               >
                 {link.name.toUpperCase()}
               </Menu.Item>
@@ -42,6 +43,7 @@ function MenuBar(props) {
                 as={NavLink}
                 exact
                 to={link.path}
+                onClick={handleClick}
               >
                 {link.name.toUpperCase()}
               </Menu.Item>

@@ -2,7 +2,6 @@
   "name": "phase-2-project",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://github.com/JackieYeDev/Portfolio",
   "dependencies": {
     "chart.js": "^3.8.0",
     "react": "^17.0.1",
