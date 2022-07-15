@@ -1,9 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import Signup from "./Signup";
 import Login from "./Login";
 import { Divider, Grid, Rail, Segment } from "semantic-ui-react";
 import { UserContext } from "../context/user";
-import Chart from "./Chart";
 
 function Home() {
   const [user] = useContext(UserContext);
@@ -13,13 +12,13 @@ function Home() {
         <Segment>
           {user.isLoggedIn ? null : (
             <>
-              <Rail position="left">
+              <Rail position='left'>
                 <Segment>
                   <Signup />
                 </Segment>
               </Rail>
 
-              <Rail position="right">
+              <Rail position='right'>
                 <Segment>
                   <Login />
                 </Segment>
