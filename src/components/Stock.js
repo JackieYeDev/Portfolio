@@ -38,7 +38,7 @@ function Stock() {
       },
       method: "PATCH",
       body: JSON.stringify({
-        stocks: [stockName],
+        stocks: [...user.stocks, stockName],
       }),
     })
       .then(() => setUser({ ...user, stocks: [...user.stocks, stockName] }))
