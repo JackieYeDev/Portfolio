@@ -9,11 +9,11 @@ function Signup() {
     password: "",
     passwordConfirmation: "",
     requirePassword: false,
-    warning: "",
-    success: "",
+    status: "",
+    message: "",
   });
 
-  const [userList, setUserList] = useGetUsers();
+  const [userList, setUserList] = useGetUsers("USERNAMES");
 
   function handleChange(event) {
     const name = event.target.name;
@@ -25,22 +25,26 @@ function Signup() {
     setFormData({ ...formData, requirePassword: !formData.requirePassword });
   }
 
+  function updateFormMessages(status, message) {
+    setFormData({ ...formData, status: status, message: message });
+  }
+
   function handleSubmit(event) {
     event.preventDefault();
     if (formData.username.length === 0) {
-      setFormData({
-        ...formData,
-        warning: "Please enter 1 or more character(s) for the username",
-      });
+      updateFormMessages(
+        "warning",
+        "Please enter 1 or more character(s) for the username"
+      );
     } else if (userList.find((user) => user.username === formData.username)) {
-      setFormData({ ...formData, warning: "User exists!" });
+      updateFormMessages("warning", "User exists!");
     } else if (
       formData.requirePassword &&
       formData.password !== formData.passwordConfirmation
     ) {
-      setFormData({ ...formData, warning: "Passwords does not match!" });
+      updateFormMessages("warning", "Passwords does not match!");
     } else {
-      setFormData({ ...formData, warning: "" });
+      setFormData({ ...formData, message: "" });
       const url = "https://dry-lowlands-31397.herokuapp.com/users";
       const saltedHash = formData.requirePassword
         ? saltedSha256(formData.password, "SALTY-CHIPS")
@@ -53,7 +57,6 @@ function Signup() {
         body: JSON.stringify({
           username: formData.username,
           password: saltedHash,
-          requirePassword: formData.requirePassword,
           stocks: [],
         }),
       })
@@ -64,8 +67,8 @@ function Signup() {
               password: "",
               passwordConfirmation: "",
               requirePassword: false,
-              warning: "",
-              success: "Your portfolio has been successfully created.",
+              status: "success",
+              message: "Your portfolio has been successfully created.",
             });
             return res.json();
           }
@@ -77,8 +80,8 @@ function Signup() {
   return (
     <Form
       onSubmit={handleSubmit}
-      warning={formData.warning ? true : false}
-      success={formData.success ? true : false}
+      warning={formData.status === "warning"}
+      success={formData.status === "success"}
     >
       <Form.Field>
         <label>Portfolio by Username:</label>
@@ -122,12 +125,13 @@ function Signup() {
           </Form.Field>
         </>
       ) : null}
-      <Message
-        warning
-        header="Something went wrong!"
-        list={[formData.warning]}
-      />
-      <Message success header="Creation complete" list={[formData.success]} />
+      {formData.status ? (
+        <Message
+          warning={formData.status === "warning"}
+          success={formData.status === "success"}
+          list={[formData.message]}
+        />
+      ) : null}
       <Button type="submit" color="green">
         Create
       </Button>

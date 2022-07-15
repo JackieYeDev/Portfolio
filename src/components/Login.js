@@ -13,9 +13,9 @@ function Login() {
     id: null,
     username: "",
     password: "",
-    requirePassword: false,
+    stocks: [],
   });
-  const [userList, setUserList] = useGetUsers();
+  const [userList, setUserList] = useGetUsers("USER-LIST");
   const [user, setUser] = useContext(UserContext);
 
   function handleUserSelect(event) {
@@ -31,21 +31,22 @@ function Login() {
 
   function handleSubmit(event) {
     event.preventDefault();
+    if (selectedUser.id === null) return null;
     const saltedHash = saltedSha256(formData.password, "SALTY-CHIPS");
-    const url = `https://dry-lowlands-31397.herokuapp.com/users/${selectedUser.id}`;
-    if (selectedUser.requirePassword && selectedUser.password !== saltedHash) {
+    if (
+      selectedUser.password.length > 0 &&
+      selectedUser.password !== saltedHash
+    ) {
+      // TODO: Implement <Message/> in form
       console.error("Invalid password");
     } else {
-      fetch(url)
-        .then((res) => res.json())
-        .then((data) => console.log(data))
-        .then(() =>
-          setUser({
-            username: selectedUser.username,
-            id: selectedUser.id,
-            isLoggedIn: true,
-          })
-        );
+      setUser({
+        id: selectedUser.id,
+        username: selectedUser.username,
+        password: selectedUser.password,
+        stocks: selectedUser.stocks,
+        isLoggedIn: true,
+      });
     }
   }
 
@@ -62,7 +63,7 @@ function Login() {
           ))}
         </select>
       </Form.Field>
-      {selectedUser.requirePassword ? (
+      {selectedUser.password ? (
         <Form.Field>
           <label>Password:</label>
           <input

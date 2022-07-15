@@ -15,15 +15,19 @@ Object.keys(chartData['Time Series (5min)']).map((key) => console.log(chartData[
 */
 }
 
-function Stock(props) {
+function Stock() {
   const [user, setUser] = useContext(UserContext);
   const stockUrl = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&interval=5min&apikey=ELE5OMMAI6VJWEWB&symbol=`;
-  const [stockName, setStockName] = useState("");
+  const [query, setQuery] = useState("");
   const [stockData, setStockData] = useState(null);
+  const [stockName, setStockName] = useState(null);
   function handleSearch() {
-    fetch(stockUrl + stockName)
+    fetch(stockUrl + query)
       .then((res) => res.json())
-      .then((data) => setStockData(data));
+      .then((data) => {
+        setStockData(data);
+        setStockName(data["Meta Data"]["2. Symbol"]);
+      });
   }
 
   const dbURL = `https://dry-lowlands-31397.herokuapp.com/users/${user.id}`;
@@ -36,7 +40,9 @@ function Stock(props) {
       body: JSON.stringify({
         stocks: [stockName],
       }),
-    });
+    })
+      .then(() => setUser({ ...user, stocks: [...user.stocks, stockName] }))
+      .catch((err) => console.error(err));
   }
   return (
     <Card color="red">
@@ -45,8 +51,8 @@ function Stock(props) {
           icon="search"
           placeholder="Enter Stock Name Here..."
           fluid
-          value={stockName}
-          onChange={(event) => setStockName(event.target.value)}
+          value={query}
+          onChange={(event) => setQuery(event.target.value.toUpperCase())}
         />
         <Button basic color="green" onClick={handleSearch}>
           Search
