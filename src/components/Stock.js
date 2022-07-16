@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { Button, Card, Form, Image, Input } from "semantic-ui-react";
 import Chart from "./Chart";
 import { UserContext } from "../context/user";
+import useFetchStocks from "../hooks/useFetchStocks";
 
 {
   /*
@@ -17,22 +18,19 @@ Object.keys(chartData['Time Series (5min)']).map((key) => console.log(chartData[
 
 function Stock() {
   const [user, setUser] = useContext(UserContext);
-  const stockUrl = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&interval=5min&apikey=ELE5OMMAI6VJWEWB&symbol=`;
   const [query, setQuery] = useState("");
-  const [stockData, setStockData] = useState(null);
-  const [stockName, setStockName] = useState(null);
+  const [stockData, setStockData, stockName, setStockName] =
+    useFetchStocks(query);
   const [fluid, setFluid] = useState(false);
+  const [formData, setFormData] = useState({
+    searchString: "",
+  });
   function handleSearch(event) {
     if (event.key !== "Enter") {
       return null;
     }
-    if (query === "") return null;
-    fetch(stockUrl + query)
-      .then(res => res.json())
-      .then(data => {
-        setStockData(data);
-        setStockName(data["Meta Data"]["2. Symbol"]);
-      });
+    if (formData.searchString === "") return null;
+    setQuery(formData.searchString);
   }
 
   const dbURL = `https://dry-lowlands-31397.herokuapp.com/users/${user.id}`;
@@ -57,8 +55,13 @@ function Stock() {
           onKeyPress={handleSearch}
           placeholder='Enter Stock Name Here...'
           fluid
-          value={query}
-          onChange={event => setQuery(event.target.value.toUpperCase())}
+          value={formData.searchString}
+          onChange={event =>
+            setFormData({
+              ...formData,
+              searchString: event.target.value.toUpperCase(),
+            })
+          }
         >
           <input />
           <Button basic color='green' onClick={handleSearch}>

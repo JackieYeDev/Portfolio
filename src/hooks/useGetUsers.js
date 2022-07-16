@@ -9,10 +9,10 @@ function useGetUsers(OPTION) {
   useEffect(() => {
     console.log("useGetUsers is called. Optional parameters: " + OPTION);
     fetch(url)
-      .then((res) => res.json())
+      .then(res => res.json())
       .then(
-        (data) =>
-          (fetchData = data.map((user) => {
+        data =>
+          (fetchData = data.map(user => {
             return {
               id: user.id,
               username: user.username,
@@ -25,24 +25,26 @@ function useGetUsers(OPTION) {
         switch (OPTION) {
           case "USERNAMES":
             setUserList(
-              fetchData.map((data) => ({
+              fetchData.map(data => ({
                 username: data.username,
               }))
             );
+            break;
           case "USER-LIST":
             setUserList(
-              fetchData.map((data) => ({
+              fetchData.map(data => ({
                 id: data.id,
                 username: data.username,
                 password: data.password,
                 stocks: data.stocks,
               }))
             );
-          default:
             break;
+          default:
+            console.error("Something went wrong!");
         }
       })
-      .catch((err) => console.error(err));
+      .catch(err => console.error(err));
   }, []);
   console.log(userList);
   return [userList, setUserList];
