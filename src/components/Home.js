@@ -31,9 +31,20 @@ function Home() {
           </h3>
           <Divider horizontal>o</Divider>
           <p>
-            {user.isLoggedIn
-              ? `Welcome back: ${user.username}`
-              : `Create a new portfolio or select an existing portfolio!`}
+            {user.isLoggedIn ? (
+              <>
+                Welcome back: {user.username}
+                <br></br>
+                You are currently watching:
+                <ul>
+                  {user.stocks.map((stock, index) => (
+                    <li key={index}>{stock}</li>
+                  ))}
+                </ul>
+              </>
+            ) : (
+              `Create a new portfolio or select an existing portfolio!`
+            )}
           </p>
         </Segment>
       </Grid.Column>

@@ -19,8 +19,7 @@ Object.keys(chartData['Time Series (5min)']).map((key) => console.log(chartData[
 function Stock() {
   const [user, setUser] = useContext(UserContext);
   const [query, setQuery] = useState("");
-  const [stockData, setStockData, stockName, setStockName] =
-    useFetchStocks(query);
+  const [stockData, stockName] = useFetchStocks(query);
   const [fluid, setFluid] = useState(false);
   const [formData, setFormData] = useState({
     searchString: "",
