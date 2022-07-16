@@ -30,10 +30,10 @@ function Home() {
             <i>Flatiron School - SE Flex - Phase 2 - Portfolio App</i>
           </h3>
           <Divider horizontal>o</Divider>
-          <p>
+          <div>
             {user.isLoggedIn ? (
               <>
-                Welcome back: {user.username}
+                <p>Welcome back: {user.username}</p>
                 <br></br>
                 You are currently watching:
                 <ul>
@@ -43,9 +43,9 @@ function Home() {
                 </ul>
               </>
             ) : (
-              `Create a new portfolio or select an existing portfolio!`
+              <p>Create a new portfolio or select an existing portfolio!</p>
             )}
-          </p>
+          </div>
         </Segment>
       </Grid.Column>
     </Grid>

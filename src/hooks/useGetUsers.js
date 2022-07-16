@@ -7,7 +7,6 @@ function useGetUsers(OPTION) {
   let fetchData;
 
   useEffect(() => {
-    console.log("useGetUsers is called. Optional parameters: " + OPTION);
     fetch(url)
       .then(res => res.json())
       .then(
@@ -46,7 +45,6 @@ function useGetUsers(OPTION) {
       })
       .catch(err => console.error(err));
   }, []);
-  console.log(userList);
   return [userList, setUserList];
 }
 

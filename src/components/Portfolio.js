@@ -1,18 +1,18 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Card, CardGroup, Divider } from "semantic-ui-react";
 import { UserContext } from "../context/user";
+import useFetchPortfolio from "../hooks/useFetchPortfolio";
 import Chart from "./Chart";
-import stock from "./Stock";
 
 function Portfolio() {
   const [user] = useContext(UserContext);
-  const stockUrl = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&interval=5min&apikey=ELE5OMMAI6VJWEWB&symbol=`;
-  const [stocks, setStocks] = useState(null);
+  const stocksArray = useFetchPortfolio(user.stocks);
 
-  function getStockData(stockName) {
-    fetch(stockUrl + stockName)
-      .then((res) => res.json())
-      .then((data) => data["Meta Data"]["2. Symbol"].toString());
+  // console.log(stocksArray);
+  if (stocksArray !== null) {
+    stocksArray.forEach(stock =>
+      console.log(stock[Object.keys(stock)]["Time Series (5min)"])
+    );
   }
 
   return (
@@ -20,13 +20,15 @@ function Portfolio() {
       <Divider horizontal></Divider>
       <h3>Portfolio Page</h3>
       <Divider horizontal></Divider>
-      {user.stocks.length > 0 ? (
+
+      {stocksArray !== null ? (
         <CardGroup centered itemsPerRow={2}>
-          {user.stocks.map((stock, index) => {
+          {stocksArray.map((stock, index) => {
+            console.log(stock[Object.keys(stock)]["Time Series (5min)"]);
             return (
               <Card key={index}>
-                <Card.Content>{getStockData(stock)}</Card.Content>
-                <Card.Content>Test</Card.Content>
+                <Card.Content>{Object.keys(stock)}</Card.Content>
+                <Card.Content></Card.Content>
               </Card>
             );
           })}
