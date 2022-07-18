@@ -6,19 +6,20 @@ import { UserContext } from "../context/user";
 
 function Home() {
   const [user] = useContext(UserContext);
+
   return (
     <Grid centered columns={3}>
       <Grid.Column>
         <Segment>
           {user.isLoggedIn ? null : (
             <>
-              <Rail position='left'>
+              <Rail position="left">
                 <Segment>
                   <Signup />
                 </Segment>
               </Rail>
 
-              <Rail position='right'>
+              <Rail position="right">
                 <Segment>
                   <Login />
                 </Segment>

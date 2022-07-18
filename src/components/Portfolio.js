@@ -11,9 +11,10 @@ import {
 import { UserContext } from "../context/user";
 import Chart from "./Chart";
 import API_KEY from "../assets/API.json";
+import stock from "./Stock";
 
 function Portfolio() {
-  const [user] = useContext(UserContext);
+  const [user, setUser] = useContext(UserContext);
   const [stocksArray, setStocksArray] = useState([]);
   const [searchString, setSearchString] = useState("");
 
@@ -45,6 +46,25 @@ function Portfolio() {
       .includes(searchString.toLowerCase())
   );
 
+  function removeStock(stockName) {
+    const newArr = user.stocks.filter((stock) => stock !== stockName);
+    // Remove from db.json
+    fetch(`https://dry-lowlands-31397.herokuapp.com/users/${user.id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: user.id,
+        username: user.username,
+        password: user.password,
+        stocks: [...newArr],
+      }),
+    });
+    // Remove from current user list
+    setUser({ ...user, stocks: [...newArr] });
+    // console.log(user.stocks);
+  }
   return (
     <Segment>
       <Header as="h3" textAlign="center" content={"Portfolio Page"} />
@@ -80,7 +100,7 @@ function Portfolio() {
                   <Button
                     basic
                     color="red"
-                    onClick={() => console.log("To be implemented")}
+                    onClick={() => removeStock(stock["Meta Data"]["2. Symbol"])}
                   >
                     Remove Stock from Portfolio
                   </Button>
