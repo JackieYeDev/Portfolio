@@ -1,5 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Card, CardGroup, Divider } from "semantic-ui-react";
+import {
+  Button,
+  Card,
+  CardGroup,
+  Divider,
+  Header,
+  Input,
+  Segment,
+} from "semantic-ui-react";
 import { UserContext } from "../context/user";
 import Chart from "./Chart";
 import API_KEY from "../assets/API.json";
@@ -7,16 +15,17 @@ import API_KEY from "../assets/API.json";
 function Portfolio() {
   const [user] = useContext(UserContext);
   const [stocksArray, setStocksArray] = useState([]);
+  const [searchString, setSearchString] = useState("");
+
+  // TODO: Add useReducer to fetch. If fetch is not fullfilled return empty array.
 
   useEffect(() => {
     let stocks = [];
+    const url = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&interval=5min&apikey=${API_KEY}&symbol=`;
     try {
       Promise.all(
         user.stocks.map((stock) =>
-          fetch(
-            `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&interval=5min&apikey=${API_KEY}&symbol=` +
-              stock
-          )
+          fetch(url + stock)
             .then((res) => res.json())
             .then((data) => data)
         )
@@ -30,15 +39,26 @@ function Portfolio() {
     }
   }, [user.stocks]);
 
+  const stocksToRender = stocksArray.filter((stock) =>
+    stock["Meta Data"]["2. Symbol"]
+      .toLowerCase()
+      .includes(searchString.toLowerCase())
+  );
+
   return (
-    <div>
-      <Divider horizontal></Divider>
-      <h3>Portfolio Page</h3>
+    <Segment>
+      <Header as="h3" textAlign="center" content={"Portfolio Page"} />
+      <Input
+        icon="search"
+        placeholder="Filter stocks to display... "
+        value={searchString}
+        onChange={(e) => setSearchString(e.target.value)}
+      />
       <Divider horizontal></Divider>
 
-      {stocksArray !== [] ? (
+      {stocksToRender !== [] ? (
         <CardGroup centered itemsPerRow={2}>
-          {stocksArray.map((stock, index) => {
+          {stocksToRender.map((stock, index) => {
             return (
               <Card key={index}>
                 <Card.Content>{stock["Meta Data"]["2. Symbol"]}</Card.Content>
@@ -56,6 +76,15 @@ function Portfolio() {
                       .reverse()}
                   />
                 </Card.Content>
+                <Card.Content extra>
+                  <Button
+                    basic
+                    color="red"
+                    onClick={() => console.log("To be implemented")}
+                  >
+                    Remove Stock from Portfolio
+                  </Button>
+                </Card.Content>
               </Card>
             );
           })}
@@ -63,7 +92,7 @@ function Portfolio() {
       ) : (
         <p>Your portfolio is currently empty!</p>
       )}
-    </div>
+    </Segment>
   );
 }
 

@@ -53,13 +53,6 @@ function MenuBar(props) {
             return null;
           }
         })}
-        {user.isLoggedIn && activeTab === "portfolio" ? (
-          <Menu.Menu position='right'>
-            <Menu.Item>
-              <Input icon='search' placeholder='Search...' />
-            </Menu.Item>
-          </Menu.Menu>
-        ) : null}
       </Menu>
     </div>
   );
