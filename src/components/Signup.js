@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { Button, Checkbox, Form, Message } from "semantic-ui-react";
-import useGetUsers from "../hooks/useGetUsers";
 const saltedSha256 = require("salted-sha256");
 
-function Signup() {
+function Signup(props) {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -13,7 +12,7 @@ function Signup() {
     message: "",
   });
 
-  const [userList, setUserList] = useGetUsers("USERNAMES");
+  const usernameList = props.usernameList;
 
   function handleChange(event) {
     const name = event.target.name;
@@ -36,7 +35,7 @@ function Signup() {
         "warning",
         "Please enter 1 or more character(s) for the username"
       );
-    } else if (userList.find((user) => user.username === formData.username)) {
+    } else if (usernameList.find((user) => user === formData.username)) {
       updateFormMessages("warning", "User exists!");
     } else if (
       formData.requirePassword &&
@@ -73,7 +72,9 @@ function Signup() {
             return res.json();
           }
         })
-        .then((data) => setUserList([...userList, data.username]));
+        .then((data) => {
+          props.setUserList([...props.userList, data]);
+        });
     }
   }
 

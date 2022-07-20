@@ -1,10 +1,10 @@
 import React, { useState, useContext } from "react";
 import { Button, Form } from "semantic-ui-react";
-import useGetUsers from "../hooks/useGetUsers";
+import useGetUsersList from "../hooks/useGetUsersList";
 import { UserContext } from "../context/user";
 const saltedSha256 = require("salted-sha256");
 
-function Login() {
+function Login(props) {
   const [formData, setFormData] = useState({
     password: "",
   });
@@ -15,7 +15,7 @@ function Login() {
     password: "",
     stocks: [],
   });
-  const [userList, setUserList] = useGetUsers("USER-LIST");
+  const userList = props.userList;
   const [user, setUser] = useContext(UserContext);
 
   function handleUserSelect(event) {

@@ -11,7 +11,6 @@ import {
 import { UserContext } from "../context/user";
 import Chart from "./Chart";
 import API_KEY from "../assets/API.json";
-import stock from "./Stock";
 
 function Portfolio() {
   const [user, setUser] = useContext(UserContext);
@@ -63,7 +62,7 @@ function Portfolio() {
     });
     // Remove from current user list
     setUser({ ...user, stocks: [...newArr] });
-    // console.log(user.stocks);
+    //console.log(user.stocks);
   }
   return (
     <Segment>

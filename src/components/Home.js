@@ -3,9 +3,13 @@ import Signup from "./Signup";
 import Login from "./Login";
 import { Divider, Grid, Rail, Segment } from "semantic-ui-react";
 import { UserContext } from "../context/user";
+import useGetUsersList from "../hooks/useGetUsersList";
 
 function Home() {
   const [user] = useContext(UserContext);
+  const [userList, setUserList] = useGetUsersList();
+
+  const usernameList = userList.map((user) => user.username);
 
   return (
     <Grid centered columns={3}>
@@ -15,13 +19,17 @@ function Home() {
             <>
               <Rail position="left">
                 <Segment>
-                  <Signup />
+                  <Signup
+                    usernameList={usernameList}
+                    setUserList={setUserList}
+                    userList={userList}
+                  />
                 </Segment>
               </Rail>
 
               <Rail position="right">
                 <Segment>
-                  <Login />
+                  <Login userList={userList} />
                 </Segment>
               </Rail>
             </>
