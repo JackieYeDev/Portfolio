@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -16,7 +16,6 @@ function Watchlist() {
   const [user, setUser] = useContext(UserContext);
   const [stocksArray, setStocksArray] = useState([]);
   const [searchString, setSearchString] = useState("");
-  const cardElement = useRef();
 
   // TODO: Add useReducer to fetch. If fetch is not fullfilled return empty array.
 
@@ -33,7 +32,6 @@ function Watchlist() {
       )
         .then((res) => stocks.push(res))
         .then(() => {
-          console.log(stocks[0]);
           setStocksArray([...stocks[0]]);
         });
     } catch (e) {
