@@ -9,8 +9,8 @@ import {
   Segment,
 } from "semantic-ui-react";
 import { UserContext } from "../context/user";
-import Chart from "./Chart";
 import API_KEY from "../assets/API.json";
+import StockCard from "./StockCard";
 
 function Watchlist() {
   const [user, setUser] = useContext(UserContext);
@@ -76,36 +76,9 @@ function Watchlist() {
 
       {stocksToRender !== [] ? (
         <CardGroup centered itemsPerRow={2}>
-          {stocksToRender.map((stock, index) => {
-            return (
-              <Card key={index} fluid={true}>
-                <Card.Content>{stock["Meta Data"]["2. Symbol"]}</Card.Content>
-                <Card.Content>
-                  <Chart
-                    stockName={stock["Meta Data"]["2. Symbol"]}
-                    labels={Object.keys(stock["Time Series (5min)"])
-                      .map((key) => key.split(" ")[1])
-                      .reverse()}
-                    data={Object.keys(stock["Time Series (5min)"])
-                      .map(
-                        (key) =>
-                          stock["Time Series (5min)"][`${key}`]["4. close"]
-                      )
-                      .reverse()}
-                  />
-                </Card.Content>
-                <Card.Content extra>
-                  <Button
-                    basic
-                    color="red"
-                    onClick={() => removeStock(stock["Meta Data"]["2. Symbol"])}
-                  >
-                    Remove Stock from Watchlist
-                  </Button>
-                </Card.Content>
-              </Card>
-            );
-          })}
+          {stocksToRender.map((stock, index) => (
+            <StockCard stock={stock} key={index} removeStock={removeStock} />
+          ))}
         </CardGroup>
       ) : (
         <p>Your watchlist is currently empty!</p>
