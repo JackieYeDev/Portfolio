@@ -31,9 +31,6 @@ function useGetUsersList() {
       })
       .catch((err) => console.error(err));
   }, []);
-  useEffect(() => {
-    console.log(userList);
-  }, [userList]);
   return [userList, setUserList];
 }
 

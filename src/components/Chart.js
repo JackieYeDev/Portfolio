@@ -29,7 +29,7 @@ function Chart(props) {
       },
       title: {
         display: true,
-        text: `${props.stockName} - Time Series Chart - INTRADAY`,
+        text: `${props.stockName} - Time Series Chart - INTRADAY (5min)`,
       },
     },
   };

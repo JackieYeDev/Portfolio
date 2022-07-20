@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   Button,
   Card,
@@ -16,6 +16,7 @@ function Portfolio() {
   const [user, setUser] = useContext(UserContext);
   const [stocksArray, setStocksArray] = useState([]);
   const [searchString, setSearchString] = useState("");
+  const cardElement = useRef();
 
   // TODO: Add useReducer to fetch. If fetch is not fullfilled return empty array.
 
@@ -32,6 +33,7 @@ function Portfolio() {
       )
         .then((res) => stocks.push(res))
         .then(() => {
+          console.log(stocks[0]);
           setStocksArray([...stocks[0]]);
         });
     } catch (e) {
@@ -62,7 +64,6 @@ function Portfolio() {
     });
     // Remove from current user list
     setUser({ ...user, stocks: [...newArr] });
-    //console.log(user.stocks);
   }
   return (
     <Segment>
@@ -79,7 +80,7 @@ function Portfolio() {
         <CardGroup centered itemsPerRow={2}>
           {stocksToRender.map((stock, index) => {
             return (
-              <Card key={index}>
+              <Card key={index} fluid={true}>
                 <Card.Content>{stock["Meta Data"]["2. Symbol"]}</Card.Content>
                 <Card.Content>
                   <Chart
