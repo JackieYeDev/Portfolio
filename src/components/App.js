@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Route, Switch } from "react-router-dom";
 import MenuBar from "./MenuBar";
 import Home from "./Home";
-import Portfolio from "./Portfolio";
+import Watchlist from "./Watchlist";
 import Stock from "./Stock";
 import { UserContext } from "../context/user";
 import { Divider } from "semantic-ui-react";
@@ -16,10 +16,10 @@ function App() {
       component: Home,
     },
     {
-      name: "portfolio",
-      path: "/portfolio",
+      name: "watchlist",
+      path: "/watchlist",
       loggedInRequired: true,
-      component: Portfolio,
+      component: Watchlist,
     },
     {
       name: "stock",

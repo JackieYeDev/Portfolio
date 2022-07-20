@@ -82,7 +82,7 @@ function Stock() {
           <Card.Content extra>
             <div className="ui two buttons">
               <Button basic color="green" onClick={handleClick}>
-                Add Stock to Porfolio
+                Add Stock to Watchlist
               </Button>
               <Button basic color="grey" onClick={() => setFluid(!fluid)}>
                 {fluid ? "Collapse" : "Expand"}

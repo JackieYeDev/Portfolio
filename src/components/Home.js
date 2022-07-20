@@ -36,7 +36,7 @@ function Home() {
           )}
 
           <h3>
-            <i>Flatiron School - SE Flex - Phase 2 - Portfolio App</i>
+            <i>Flatiron School - SE Flex - Phase 2 - Watchlist App</i>
           </h3>
           <Divider horizontal>o</Divider>
           <div>

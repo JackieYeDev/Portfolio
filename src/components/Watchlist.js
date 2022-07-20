@@ -12,7 +12,7 @@ import { UserContext } from "../context/user";
 import Chart from "./Chart";
 import API_KEY from "../assets/API.json";
 
-function Portfolio() {
+function Watchlist() {
   const [user, setUser] = useContext(UserContext);
   const [stocksArray, setStocksArray] = useState([]);
   const [searchString, setSearchString] = useState("");
@@ -67,7 +67,7 @@ function Portfolio() {
   }
   return (
     <Segment>
-      <Header as="h3" textAlign="center" content={"Portfolio Page"} />
+      <Header as="h3" textAlign="center" content={"Watchlist Page"} />
       <Input
         icon="search"
         placeholder="Filter stocks to display... "
@@ -102,7 +102,7 @@ function Portfolio() {
                     color="red"
                     onClick={() => removeStock(stock["Meta Data"]["2. Symbol"])}
                   >
-                    Remove Stock from Portfolio
+                    Remove Stock from Watchlist
                   </Button>
                 </Card.Content>
               </Card>
@@ -110,10 +110,10 @@ function Portfolio() {
           })}
         </CardGroup>
       ) : (
-        <p>Your portfolio is currently empty!</p>
+        <p>Your watchlist is currently empty!</p>
       )}
     </Segment>
   );
 }
 
-export default Portfolio;
+export default Watchlist;
