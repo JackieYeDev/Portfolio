@@ -25,7 +25,7 @@ function Stock() {
     color: "",
   });
   function handleSearch(event) {
-    if (event.key !== "Enter") {
+    if (event.key !== "Enter" || event.target.name === "searchBtn") {
       return null;
     }
     if (searchString === "") return null;
@@ -101,7 +101,12 @@ function Stock() {
             <Card.Content textAlign={"center"}></Card.Content>
             <Card.Content extra>
               <div className="ui two buttons">
-                <Button basic color="green" onClick={handleClick}>
+                <Button
+                  basic
+                  color="green"
+                  name="searchBtn"
+                  onClick={handleClick}
+                >
                   Add Stock to Watchlist
                 </Button>
                 <Button basic color="grey" onClick={() => setFluid(!fluid)}>
