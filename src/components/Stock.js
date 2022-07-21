@@ -27,6 +27,7 @@ function Stock() {
   function handleSearch() {
     if (searchString === "") return null;
     setQuery(searchString);
+    setMessageData({ message: "", status: "", color: "" });
   }
 
   const dbURL = `https://dry-lowlands-31397.herokuapp.com/users/${user.id}`;
