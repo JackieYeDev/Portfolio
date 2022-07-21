@@ -13,6 +13,11 @@ This project is to fulfill the requirements for Phase 2 of the Flatiron School -
 - [ ] You should keep your json-server data simple: avoid nested data and associations. You'll learn how to work with more complex data in the next two phases. Focus on the frontend for this project.
 - [ ] Add some styling: you're encouraged to write your CSS from scratch, either by using styled components or writing CSS files and using id/className to style your elements. You can also incorporate a UI framework (like React Bootstrap, Semantic UI, or Material UI) if you prefer.
 
+
+## Limitations
+- 5 API Calls per Minute and 500 API Calls per Day
+- Json-server database resets when Heroku sleeps after idling
+
 ## Installation
 
 ### `npm install`
