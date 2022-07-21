@@ -1,12 +1,13 @@
 import React, { useState, useContext } from "react";
-import { Button, Form } from "semantic-ui-react";
-import useGetUsersList from "../hooks/useGetUsersList";
+import { Button, Form, Message } from "semantic-ui-react";
 import { UserContext } from "../context/user";
 const saltedSha256 = require("salted-sha256");
 
 function Login(props) {
   const [formData, setFormData] = useState({
     password: "",
+    message: "",
+    status: "",
   });
 
   const [selectedUser, setSelectedUser] = useState({
@@ -21,6 +22,7 @@ function Login(props) {
   function handleUserSelect(event) {
     const value = event.target.value;
     setSelectedUser(userList.find((user) => user.id == value));
+    setFormData({ ...formData, password: "", status: "", message: "" });
   }
 
   function handleChange(event) {
@@ -37,8 +39,11 @@ function Login(props) {
       selectedUser.password.length > 0 &&
       selectedUser.password !== saltedHash
     ) {
-      // TODO: Implement <Message/> in form
-      console.error("Invalid password");
+      setFormData({
+        ...formData,
+        status: "warning",
+        message: "Invalid Password",
+      });
     } else {
       setUser({
         id: selectedUser.id,
@@ -51,7 +56,7 @@ function Login(props) {
   }
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit} warning={formData.status === "warning"}>
       <Form.Field>
         <label>Load Watchlist by Username:</label>
         <select onChange={handleUserSelect}>
@@ -78,6 +83,12 @@ function Login(props) {
       <Button type="submit" color="blue">
         Load Watchlist
       </Button>
+      {formData.status ? (
+        <Message
+          warning={formData.status === "warning"}
+          list={[formData.message]}
+        />
+      ) : null}
     </Form>
   );
 }
