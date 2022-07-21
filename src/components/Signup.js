@@ -67,7 +67,7 @@ function Signup(props) {
               passwordConfirmation: "",
               requirePassword: false,
               status: "success",
-              message: "Your portfolio has been successfully created.",
+              message: "Your watchlist has been successfully created.",
             });
             return res.json();
           }
@@ -85,7 +85,7 @@ function Signup(props) {
       success={formData.status === "success"}
     >
       <Form.Field>
-        <label>Create New Portfolio by Username:</label>
+        <label>Create a New Watchlist by Username:</label>
         <input
           name="username"
           placeholder="Username"
