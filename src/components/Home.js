@@ -52,7 +52,7 @@ function Home() {
                 </ul>
               </>
             ) : (
-              <p>Create a new portfolio or select an existing portfolio!</p>
+              <p>Create a new watchlist or select an existing watchlist!</p>
             )}
           </div>
         </Segment>

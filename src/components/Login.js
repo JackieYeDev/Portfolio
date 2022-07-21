@@ -53,7 +53,7 @@ function Login(props) {
   return (
     <Form onSubmit={handleSubmit}>
       <Form.Field>
-        <label>Load Portfolio by Username:</label>
+        <label>Load Watchlist by Username:</label>
         <select onChange={handleUserSelect}>
           <option selected value={0} disabled></option>
           {userList.map((user, index) => (
@@ -76,7 +76,7 @@ function Login(props) {
         </Form.Field>
       ) : null}
       <Button type="submit" color="blue">
-        Load Portfolio
+        Load Watchlist
       </Button>
     </Form>
   );
