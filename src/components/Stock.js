@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Button, Card, Input, Message } from "semantic-ui-react";
+import { Button, Card, Input, Message, Segment } from "semantic-ui-react";
 import Chart from "./Chart";
 import { UserContext } from "../context/user";
 import useFetchStocks from "../hooks/useFetchStocks";
@@ -24,10 +24,7 @@ function Stock() {
     status: "",
     color: "",
   });
-  function handleSearch(event) {
-    if (event.key !== "Enter" || event.target.name === "searchBtn") {
-      return null;
-    }
+  function handleSearch() {
     if (searchString === "") return null;
     setQuery(searchString);
   }
@@ -66,12 +63,11 @@ function Stock() {
       .catch((err) => console.error(err));
   }
   return (
-    <>
+    <Segment>
       <Card centered color="olive" fluid={fluid}>
         <Card.Header textAlign={"center"}>
           <Input
             action
-            onKeyPress={handleSearch}
             placeholder="Enter Stock Name Here..."
             fluid
             value={searchString}
@@ -123,7 +119,7 @@ function Stock() {
           </>
         ) : null}
       </Card>
-    </>
+    </Segment>
   );
 }
 
